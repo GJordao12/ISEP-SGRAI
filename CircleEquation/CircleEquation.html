@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Circle Equation</title>
+    <style>
+        body {
+            background-color: #808080;
+        }
+        
+        #title {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 4vmin;
+            color: white;
+        }
+        
+        label {
+            font-family: Arial, sans-serif;
+        }
+        
+        table {
+            margin-left: auto;
+            margin-right: auto;
+            font-family: Arial, sans-serif;
+            background-color: #707070;
+            border: 1px solid black;
+        }
+        
+        th.output {
+            text-align: center;
+            border: 1px solid black;
+        }
+        
+        td.output {
+            padding-right: 9%;
+            text-align: right;
+            border: 1px solid black;
+        }
+        
+        input:invalid {
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="title">Circle Equation</div>
+    <br />
+    <table>
+        <tr>
+            <td>
+                <label>Number of points (n):</label>
+                <input type="number" id="n" min="2" max="60" step="1" value="8" required />
+            </td>
+            <td>
+                <label>Radius (r):</label>
+                <input type="number" id="r" min="0.1" max="10.0" step="0.1" value="1.0" required />
+            </td>
+            <td>
+                <label>Center coordinates (x0):</label>
+                <input type="number" id="x0" min="-10.0" max="10.0" step="0.1" value="0.0" required />
+                <label>(y0):</label>
+                <input type="number" id="y0" min="-10.0" max="10.0" step="0.1" value="0.0" required />
+            </td>
+            <td>
+                <input type="button" id="build" value="Build table" />
+            </td>
+        </tr>
+    </table>
+    <br />
+    <table id="output" style="width: 50%">
+        <colgroup>
+            <col style="width: 22%" />
+            <col span="3" style="width: 26%" />
+        </colgroup>
+        <tr>
+            <th class="output"></th>
+            <th class="output">t (degrees)</th>
+            <th class="output">x</th>
+            <th class="output">y</th>
+        </tr>
+    </table>
+    <script>
+        const button = document.getElementById("build");
+        const output = document.getElementById("output");
+
+        button.addEventListener("click", buildTable);
+        document.addEventListener("keydown", keyDown);
+
+        function validate(id) {
+            const element = document.getElementById(id);
+            if (element.checkValidity()) {
+                return Number(element.value);
+            }
+            return Number.NaN;
+        }
+
+        function buildTable() {
+            /* To-do #1 - Set and validate circle parameters r, x0 and y0
+            - follow the example of parameter n below*/
+
+            const n = validate("n"); // Number of points
+            const r = validate("r"); // Radius
+            const x0 = validate("x0"); // Center abscissa
+            const y0 = validate("y0"); // Center ordinate
+            if (!Number.isNaN(n) &&
+                !Number.isNaN(r) &&
+                !Number.isNaN(x0) &&
+                !Number.isNaN(y0)
+            ) {
+                // Delete the previous output table (if applicable)
+                while (output.rows.length > 1) {
+                    output.deleteRow(-1);
+                }
+
+                // Create the output table
+                /* To-do #2 - Set the values of the starting angle and angle increment (in radians) */
+                let angle = 360 / n;
+                /* To-do #3 - Set the for () loop parameters */
+                let i;
+                for (i = 0; i < n; i++) {
+                    /* To-do #5 - Add the value of i (0, 1, 2, etc.) to the newly created cell contents
+                    cell.innerHTML = ...;
+                    cell = row.insertCell(-1);
+                    cell.className = 'output'; */
+                    let row = output.insertRow(-1);
+                    let cell = row.insertCell(-1);
+                    cell.className = "output";
+                    cell.innerHTML = i;
+
+                    /* To-do #6 - Add the value of angle (in degrees) to the newly created cell contents
+                    cell.innerHTML = ....toFixed(2);
+                    cell = row.insertCell(-1);
+                    cell.className = 'output'; */
+                    cell = row.insertCell(-1);
+                    cell.className = "output";
+                    let angleLine = (angle * i).toFixed(2);
+                    cell.innerHTML = angleLine;
+
+                    /* To-do #7 - Add the value of point coordinate x to the newly created cell contents
+                    cell.innerHTML = ....toFixed(4);
+                    cell = row.insertCell(-1);
+                    cell.className = 'output';*/
+                    let angleradius = angleLine * (Math.PI / 180);
+                    cell = row.insertCell(-1);
+                    cell.className = "output";
+                    cell.innerHTML = (r * Math.cos(angleradius) + x0).toFixed(4);
+
+                    /* To-do #8 - Add the value of point coordinate y to the newly created cell contents
+                    cell.innerHTML = ....toFixed(4);*/
+                    cell = row.insertCell(-1);
+                    cell.className = "output";
+                    cell.innerHTML = (r * Math.sin(angleradius) + y0).toFixed(4);
+                }
+            }
+        }
+
+        function keyDown(event) {
+            if (!event.repeat && event.code == "Enter") {
+                buildTable();
+            }
+        }
+    </script>
+</body>
+
+</html>
