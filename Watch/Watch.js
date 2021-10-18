@@ -264,10 +264,12 @@ export default class Watch {
             }
             this.label.appendChild( option );
         }
-        this.label.addEventListener("change", function() {
-            //fazer algo para atualizar o relógio
-          });
+        this.label.addEventListener("change", value => this.change(this.label.value));
         parent.appendChild(this.label);
+    }
+
+    change(index){
+        this.cityIndex = index;
     }
 
     update() {
